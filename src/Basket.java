@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Arrays;
 
-public class Basket {
+public class Basket implements Serializable{
     private int[] basket, prices;
     private String[] goods;
 
@@ -40,31 +40,17 @@ public class Basket {
         }
     }
 
-    public void saveTxt(File textFile) throws IOException {
-        try (PrintWriter out = new PrintWriter(textFile);) {
-            for (int element : basket) out.print(element + " ");
-            out.print("\n");
-            for (int element : prices) out.print(element + " ");
-            out.print("\n");
-            for (String element : goods) out.print(element + " ");
-            out.print("\n");
+    public void saveBin(File file) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(this);
         }
     }
 
-    public static Basket loadFromTxtFile(File textFile) throws IOException{
-        try (FileReader input = new FileReader(textFile)) {
-            StringBuilder result = new StringBuilder();
-            Character c;
-            while ((c = (char)input.read()) != '\n') result.append(c);
-            int[] basketLoad = Arrays.stream(result.toString().split(" ")).mapToInt(Integer::parseInt).toArray();
-            result.setLength(0);
-            while ((c = (char)input.read()) != '\n') result.append(c);
-            int[] pricesLoad = Arrays.stream(result.toString().split(" ")).mapToInt(Integer::parseInt).toArray();
-            result.setLength(0);
-            while ((c = (char)input.read()) != '\n') result.append(c);
-            String[] goodsLoad = result.toString().split(" ");
-            result.setLength(0);
-            return new Basket(basketLoad,pricesLoad,goodsLoad);
+    public static Basket loadFromBinFile(File file) throws IOException,ClassNotFoundException{
+        try (FileInputStream fos = new FileInputStream(file);
+             ObjectInputStream ois = new ObjectInputStream(fos)) {
+            return (Basket)ois.readObject();
         }
     }
 }

@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException,ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
-        File textBasket = new File("./file.txt");
+        File textBasket = new File("./basket.bin");
         Basket basket;
 
-        if (textBasket.exists()) basket = Basket.loadFromTxtFile(textBasket);
+        if (textBasket.exists()) basket = Basket.loadFromBinFile(textBasket);
         else {
             basket = new Basket(new int[]{125, 333, 500}, new String[]{"Хлеб", "Молоко", "Печенье"});
             textBasket.createNewFile();
@@ -24,7 +24,7 @@ public class Main {
                 break;
             }
             basket.addToCart(Arrays.stream(input.split(" ")).mapToInt(Integer::parseInt).toArray()[0], Arrays.stream(input.split(" ")).mapToInt(Integer::parseInt).toArray()[1]);
-            basket.saveTxt(textBasket);
+            basket.saveBin(textBasket);
         }
     }
 }

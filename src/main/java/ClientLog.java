@@ -1,4 +1,5 @@
 import com.opencsv.CSVWriter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class ClientLog {
 
     public void exportAsCSV(File file) throws IOException {
         if (file.exists()) {
-            try (CSVWriter writer = new CSVWriter(new FileWriter(file))) {
+            try (CSVWriter writer = new CSVWriter(new FileWriter(file,true))) {
                 for (int[] currentChoice : choice) {
                     writer.writeNext(Arrays.stream(currentChoice)
                             .mapToObj(String::valueOf)
